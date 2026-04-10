@@ -1,73 +1,131 @@
-# React + TypeScript + Vite
+# 🌱 TaskFlow – Project & Task Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive task management application built as part of the Zomato frontend assignment.
+It allows users to manage projects and tasks using a clean Kanban-style interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+### 🔐 Authentication
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* Login with test credentials
+* JWT stored in localStorage
+* Protected routes for authenticated users
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📁 Projects
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* View all projects
+* Create new projects
+* Projects are user-specific (multi-user support using localStorage)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### ✅ Tasks
+
+* Create, edit, and delete tasks
+* Tasks grouped by:
+
+  * To Do
+  * In Progress
+  * Done
+* Add:
+
+  * Priority
+  * Assignee
+  * Due date
+* Optimistic UI updates for smooth experience
+
+---
+
+### 🎨 UI/UX
+
+* Fully responsive (mobile + desktop)
+* Modal-based task creation/editing
+* Clean Kanban board layout
+* Loading and error states handled
+* Smooth transitions and hover effects
+
+---
+
+## 🛠️ Tech Stack
+
+* **React + TypeScript**
+* **React Router**
+* **React Query**
+* **Tailwind CSS (custom UI components)**
+* **MSW (Mock Service Worker)** for API simulation
+
+---
+
+## 📡 API (Mocked via MSW)
+
+Implemented endpoints:
+
+* `POST /auth/login`
+* `POST /auth/register`
+* `GET /projects`
+* `POST /projects`
+* `GET /projects/:id`
+* `GET /projects/:id/tasks`
+* `POST /projects/:id/tasks`
+* `PATCH /tasks/:id`
+* `DELETE /tasks/:id`
+
+---
+
+## 🔑 Test Credentials
+
+Use the following to log in:
+
+```
+Email: test@example.com
+Password: password123
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ▶️ Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+---
+
+## 🧠 Architecture Notes
+
+* API is mocked using **MSW** — no real backend required
+* Data is persisted in **localStorage**
+* Multi-user support implemented using user-specific storage keys
+* React Query is used for:
+
+  * Data fetching
+  * Cache management
+  * Optimistic UI updates
+
+---
+
+## 🐳 Docker
+
+No Docker setup is required for this project.
+Since the backend is mocked using MSW and runs entirely in the browser, the application can be started with standard npm scripts.
+
+---
+
+## ✨ Highlights
+
+* Full CRUD for tasks
+* Optimistic UI updates
+* Clean and responsive UI
+* Realistic API simulation with MSW
+* Multi-user data isolation
+
+---
+
+## 📌 Author
+
+**Uzra Khan**

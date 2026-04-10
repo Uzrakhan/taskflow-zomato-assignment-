@@ -12,7 +12,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center sticky top-0 z-50">
+    <nav className="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center sticky top-0 mt-2 z-50">
       <div className="flex items-center gap-2 text-emerald-600 font-bold text-xl">
         <Leaf fill="currentColor" />
         <span>TaskFlow</span>

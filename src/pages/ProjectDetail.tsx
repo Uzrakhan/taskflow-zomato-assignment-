@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronRight, Clock, CheckCircle2, Circle, AlertCircle, Loader2, Plus } from 'lucide-react';
+import { Trash2,ChevronRight, Clock, CheckCircle2, Circle, AlertCircle, Loader2, Plus } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import CreateTaskModal from '../components/CreateTaskModal';
 import { useState } from 'react';
@@ -20,15 +20,19 @@ export default function ProjectDetail() {
   };
 
   try {
-    // 2. WAIT for the POST to finish
-    await fetch(`http://localhost:4000/projects/${id}/tasks`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}` 
-      },
-      body: JSON.stringify(taskToSave)
-    });
+    if (selectedTask) {
+      await fetch(`http://localhost:4000/tasks/${selectedTask.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskToSave)
+      });
+    } else {
+      await fetch(`http://localhost:4000/projects/${id}/tasks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskToSave)
+      });
+    }
 
     // 3. Small buffer to ensure LocalStorage write is committed
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -55,7 +59,24 @@ export default function ProjectDetail() {
   }
   };
 
-  const { data, isLoading } = useQuery({
+  const handleDeleteTask = async (taskId : string) => {
+    try{
+      await fetch(`http://localhost:4000/tasks/${taskId}`, {
+        method: "DELETE"
+      })
+
+      queryClient.setQueryData(['project', id], (oldData: any) => {
+        return {
+          ...oldData,
+          tasks: oldData.tasks.filter((t: any) => t.id !== taskId)
+        }
+      })
+    } catch(error) {
+      console.error('Error deleting the task: ', error)
+    }
+  }
+
+  const { data, isLoading, error } = useQuery({
     queryKey: ['project', id],
     queryFn: async () => {
       const response = await fetch(`http://localhost:4000/projects/${id}`, {
@@ -64,6 +85,10 @@ export default function ProjectDetail() {
       return response.json();
     }
   });
+
+  if (error) {
+    return <div className="text-red-500 p-4">Something went wrong</div>;
+  }
 
   const tasks = data?.tasks || [];
   const columns = [
@@ -92,7 +117,7 @@ export default function ProjectDetail() {
         </nav>
 
         {/* Header Section - Added the + Add Task Button here */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
             <h1 className="text-4xl font-bold mb-2">{data?.name}</h1>
             <p className="text-slate-500 max-w-2xl">{data?.description}</p>
@@ -107,7 +132,7 @@ export default function ProjectDetail() {
         </div>
 
         {/* Kanban Board Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {columns.map((col) => (
             <div key={col.status} className="bg-slate-100/50 p-4 rounded-2xl border border-slate-200">
               <div className="flex items-center gap-2 mb-6 px-2">
@@ -128,9 +153,18 @@ export default function ProjectDetail() {
                         setSelectedTask(task);
                         setIsModalOpen(true);
                       }}
-                      className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-emerald-200 hover:shadow-md transition-all group"
+                      className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-emerald-200 hover:shadow-md transition-all group relative"
                     >
                       <h4 className="font-semibold text-slate-800 leading-tight mb-4">{task.title}</h4>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // ❗ prevents opening edit modal
+                          handleDeleteTask(task.id);
+                        }}
+                        className="absolute top-2 right-2 text-red-500 opacity-0 group-hover:opacity-100 transition"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                       
                       <div className="flex items-center justify-between">
                         <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-md flex items-center gap-1 
@@ -141,6 +175,11 @@ export default function ProjectDetail() {
                           {task.priority}
                         </span>
                         
+                        {task.assignee_id && (
+                            <span className="text-[11px] text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
+                              👤 {task.assignee_id}
+                            </span>
+                          )}
                         {task.due_date && (
                           <span className="text-[11px] text-slate-400 flex items-center gap-1 font-medium">
                             <Clock size={12} />

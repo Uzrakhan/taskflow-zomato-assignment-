@@ -71,6 +71,12 @@ export default function Login() {
             {loading ? <Loader2 className="animate-spin mr-2" /> : "Sign In"}
           </button>
         </form>
+
+        <div className="mt-4 text-sm text-slate-500 bg-slate-50 p-3 rounded-lg">
+          <p className="font-medium">Test Credentials:</p>
+          <p>Email: test@example.com</p>
+          <p>Password: password123</p>
+        </div>
       </div>
     </div>
   );

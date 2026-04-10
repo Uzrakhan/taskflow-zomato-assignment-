@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Loader2 } from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (task: any) => void;
+  task?: any;
 }
 
-export default function CreateTaskModal({ isOpen, onClose, onSubmit }: Props) {
+export default function CreateTaskModal({ isOpen, onClose, onSubmit, task }: Props) {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('medium');
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,20 @@ export default function CreateTaskModal({ isOpen, onClose, onSubmit }: Props) {
   const [assignee, setAssignee] = useState('');
   const [dueDate, setDueDate] = useState('');
 
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title || '');
+      setDescription(task.description || '');
+      setStatus(task.status || 'todo');
+      setPriority(task.priority || 'medium');
+      setAssignee(task.assignee_id || '');
+      setDueDate(task.due_date || '');
+    }
+  }, [task]);
+
   if (!isOpen) return null;
+
+  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +49,7 @@ export default function CreateTaskModal({ isOpen, onClose, onSubmit }: Props) {
         priority, 
         assignee_id: assignee || null,
         due_date: dueDate || null,
-        id: crypto.randomUUID() 
+        id: task?.id ||  crypto.randomUUID() 
       });
       setTitle('');
       setDescription('');
@@ -48,11 +62,15 @@ export default function CreateTaskModal({ isOpen, onClose, onSubmit }: Props) {
     }, 500);
   };
 
+  
+
   return (
     <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
       <div className="bg-white w-full max-w-lg max-h-[100vh] overflow-y-auto rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-bold">New Task</h2>
+          <h2 className="text-xl font-bold">
+            {task ? "Edit Task" : "New Task"}
+          </h2>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
         </div>
         
@@ -140,7 +158,7 @@ export default function CreateTaskModal({ isOpen, onClose, onSubmit }: Props) {
             disabled={loading}
             className="w-full bg-emerald-600 text-white font-bold p-3 rounded-lg hover:bg-emerald-700 flex justify-center"
           >
-            {loading ? <Loader2 className="animate-spin" /> : 'Create Task'}
+            {loading ? <Loader2 className="animate-spin" /> : task ? 'Update Task' : 'Create Task'}
           </button>
         </form>
       </div>

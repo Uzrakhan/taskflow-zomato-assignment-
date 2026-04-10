@@ -8,6 +8,7 @@ import { useState } from 'react';
 export default function ProjectDetail() {
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<any>(null);
   const queryClient = useQueryClient();
 
   const handleCreateTask = async (newTask: any) => {
@@ -35,9 +36,16 @@ export default function ProjectDetail() {
     // 4. Force RE-FETCH of the project data
     // This will pull the updated 'tasks' array from MSW
     queryClient.setQueryData(['project', id], (oldData: any) => {
+      const existingTasks = oldData?.tasks || [];
+
+      const updatedTasks = existingTasks.some((t: any) => t.id === taskToSave.id)
+        ? existingTasks.map((t: any) => 
+            t.id === taskToSave.id ? taskToSave : t
+          )
+        : [...existingTasks, taskToSave]
       return {
         ...oldData,
-        tasks: [...(oldData?.tasks || []), taskToSave]
+        tasks: updatedTasks
       };
     });    
     // Close modal
@@ -116,6 +124,10 @@ export default function ProjectDetail() {
                   .map((task: any) => (
                     <div 
                       key={task.id} 
+                      onClick={() => {
+                        setSelectedTask(task);
+                        setIsModalOpen(true);
+                      }}
                       className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-emerald-200 hover:shadow-md transition-all group"
                     >
                       <h4 className="font-semibold text-slate-800 leading-tight mb-4">{task.title}</h4>
@@ -153,8 +165,12 @@ export default function ProjectDetail() {
       {/* The Modal Component */}
       <CreateTaskModal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSubmit={handleCreateTask} 
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedTask(null);
+        }}
+        onSubmit={handleCreateTask}
+        task={selectedTask} 
       />
     </>
   );

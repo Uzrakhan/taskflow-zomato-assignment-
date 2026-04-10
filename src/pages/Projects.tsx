@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Plus, Folder, Loader2, LogOut } from 'lucide-react';
+import { Plus, Folder, Loader2 } from 'lucide-react';
 import CreateProjectModal from '../components/CreateProjectModal';
 import Navbar from '../components/Navbar';
 

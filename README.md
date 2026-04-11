@@ -96,33 +96,6 @@ All APIs are mocked using MSW (Mock Service Worker).
 
 ---
 
-#### POST `/auth/register`
-
-**Request:**
-
-```json
-{
-  "name": "Jane Doe",
-  "email": "jane@example.com",
-  "password": "secret123"
-}
-```
-
-**Response:**
-
-```json
-{
-  "token": "mock-jwt-token-123",
-  "user": {
-    "id": "uuid",
-    "name": "Jane Doe",
-    "email": "jane@example.com"
-  }
-}
-```
-
----
-
 ### 📁 Projects
 
 #### GET `/projects`

@@ -62,17 +62,150 @@ It allows users to manage projects and tasks using a clean Kanban-style interfac
 
 ## 📡 API (Mocked via MSW)
 
-Implemented endpoints:
+## 📘 API Reference
 
-* `POST /auth/login`
-* `POST /auth/register`
-* `GET /projects`
-* `POST /projects`
-* `GET /projects/:id`
-* `GET /projects/:id/tasks`
-* `POST /projects/:id/tasks`
-* `PATCH /tasks/:id`
-* `DELETE /tasks/:id`
+All APIs are mocked using MSW (Mock Service Worker).
+
+---
+
+### 🔐 Auth
+
+#### POST `/auth/login`
+
+**Request:**
+
+```json
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "token": "mock-jwt-token-123",
+  "user": {
+    "id": "user-1",
+    "name": "Test User",
+    "email": "test@example.com"
+  }
+}
+```
+
+---
+
+#### POST `/auth/register`
+
+**Request:**
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "password": "secret123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "token": "mock-jwt-token-123",
+  "user": {
+    "id": "uuid",
+    "name": "Jane Doe",
+    "email": "jane@example.com"
+  }
+}
+```
+
+---
+
+### 📁 Projects
+
+#### GET `/projects`
+
+Returns all projects for the logged-in user.
+
+---
+
+#### POST `/projects`
+
+**Request:**
+
+```json
+{
+  "name": "New Project",
+  "description": "Project description"
+}
+```
+
+---
+
+#### GET `/projects/:id`
+
+Returns project details along with tasks.
+
+---
+
+### ✅ Tasks
+
+#### GET `/projects/:id/tasks`
+
+Supports optional query params:
+
+* `status`
+* `assignee`
+
+---
+
+#### POST `/projects/:id/tasks`
+
+**Request:**
+
+```json
+{
+  "title": "Design dashboard",
+  "status": "todo",
+  "priority": "medium",
+  "assignee_id": "user-1",
+  "due_date": "2026-04-15"
+}
+```
+
+---
+
+#### PATCH `/tasks/:id`
+
+Updates an existing task.
+
+---
+
+#### DELETE `/tasks/:id`
+
+Deletes a task.
+
+---
+
+
+## 🚧 What I'd Do With More Time
+
+* Implement a real backend (Node.js + PostgreSQL) instead of MSW for persistent data storage
+* Add drag-and-drop functionality for tasks (Kanban interaction)
+* Improve assignee system with selectable users instead of free text
+* Add real-time updates using WebSockets or SSE
+* Enhance accessibility (ARIA roles, keyboard navigation)
+* Add unit and integration tests (React Testing Library)
+* Implement dark mode with theme persistence
+* Optimize performance for large task lists (virtualization)
+
+### Tradeoffs Made
+
+* Used MSW instead of a real backend to focus on frontend functionality and UX
+* Simplified authentication (mock JWT) for faster development
+* Assignee stored as simple string instead of relational user model
 
 ---
 

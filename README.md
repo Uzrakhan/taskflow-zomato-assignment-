@@ -81,13 +81,30 @@ Implemented endpoints:
 Use the following to log in:
 
 ```
-Email: test@example.com
+Email: test@example.com  
 Password: password123
 ```
 
 ---
 
-## ▶️ Getting Started
+## ▶️ Running Locally (Docker)
+
+This project can be run entirely using Docker (no Node.js installation required).
+
+```bash
+git clone https://github.com/Uzrakhan/taskflow-UzraKhan
+cd taskflow-uzra-khan
+cp .env.example .env
+docker compose up --build
+```
+
+The app will be available at:
+
+👉 http://localhost:3000
+
+---
+
+## 🧪 Running Without Docker (Optional)
 
 ```bash
 npm install
@@ -111,8 +128,9 @@ npm run dev
 
 ## 🐳 Docker
 
-No Docker setup is required for this project.
-Since the backend is mocked using MSW and runs entirely in the browser, the application can be started with standard npm scripts.
+* Multi-stage Docker build used for optimized production image
+* Frontend served using a lightweight static server (`serve`)
+* Entire app runs with a single command using Docker Compose
 
 ---
 
@@ -123,6 +141,7 @@ Since the backend is mocked using MSW and runs entirely in the browser, the appl
 * Clean and responsive UI
 * Realistic API simulation with MSW
 * Multi-user data isolation
+* One-command Docker setup
 
 ---
 

@@ -6,7 +6,7 @@ import App from './App.tsx'
 
 async function prepare() {
   return worker.start({
-    onUnhandledRequest: 'bypass', // Don't warn about other requests
+    onUnhandledRequest: 'bypass', 
   })
 }
 

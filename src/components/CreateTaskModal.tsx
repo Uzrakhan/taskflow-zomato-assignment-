@@ -40,7 +40,7 @@ export default function CreateTaskModal({ isOpen, onClose, onSubmit, task }: Pro
     }
 
     setLoading(true);
-    // Simulate API delay for that "Optimistic UI" feel
+    
     setTimeout(() => {
       onSubmit({ 
         title, 

@@ -24,7 +24,6 @@ export default function Projects() {
   }
 
   const handleCreateProject = async (newProject: any) => {
-    // Optimistic Update for Projects List
     queryClient.setQueryData(['projects'], (old: any) => ({
       ...old,
       projects: [newProject, ...(old?.projects || [])]
@@ -45,7 +44,7 @@ export default function Projects() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
         
-        {/* 🔥 HEADER */}
+        {/* HEADER */}
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">Projects</h1>
@@ -62,14 +61,14 @@ export default function Projects() {
           </button>
         </header>
 
-        {/* 🔥 LOADING */}
+        {/* LOADING */}
         {isLoading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="animate-spin text-emerald-600" size={40} />
           </div>
         ) : (
           
-          /* 🔥 GRID */
+          /* GRID */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             
             {data?.projects?.map((project: any) => (
@@ -90,7 +89,7 @@ export default function Projects() {
               </Link>
             ))}
 
-            {/* 🔥 EMPTY STATE */}
+            {/* EMPTY STATE */}
             {data?.projects?.length === 0 && (
               <div className="col-span-full text-center py-12 border-2 border-dashed border-slate-200 rounded-xl">
                 <p className="text-slate-400">

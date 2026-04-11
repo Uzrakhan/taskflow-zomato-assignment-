@@ -122,14 +122,14 @@ export default function ProjectDetail() {
     <>
       <Navbar />
       <div className="max-w-7xl mx-auto p-6">
-        {/* Breadcrumbs - Fixed alignment */}
+        {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
           <Link to="/projects" className="hover:text-emerald-600 transition-colors">Projects</Link>
           <ChevronRight size={14} />
           <span className="text-slate-900 font-medium">{data?.name}</span>
         </nav>
 
-        {/* Header Section - Added the + Add Task Button here */}
+        {/* Header Section  */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
             <h1 className="text-4xl font-bold mb-2">{data?.name}</h1>
@@ -177,6 +177,8 @@ export default function ProjectDetail() {
             Clear Filters
           </button>
         </div>
+
+
         {/* Kanban Board Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {columns.map((col) => (
@@ -247,7 +249,7 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      {/* The Modal Component */}
+      {/* Modal Component */}
       <CreateTaskModal 
         isOpen={isModalOpen} 
         onClose={() => {

@@ -9,6 +9,8 @@ export default function ProjectDetail() {
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [assigneeFilter, setAssigneeFilter] = useState('');
   const queryClient = useQueryClient();
 
   const handleCreateTask = async (newTask: any) => {
@@ -105,6 +107,17 @@ export default function ProjectDetail() {
     );
   }
 
+  const filteredTasks = tasks.filter((task: any) => {
+    const statusMatch = statusFilter ? task.status === statusFilter : true;
+
+    const assigneeMatch = assigneeFilter
+      ? task.assignee_id?.toLowerCase().includes(assigneeFilter.toLowerCase())
+      : true;
+
+    return statusMatch && assigneeMatch;
+  });
+
+
   return (
     <>
       <Navbar />
@@ -131,6 +144,39 @@ export default function ProjectDetail() {
           </button>
         </div>
 
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+  
+          {/* STATUS FILTER */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="p-2 border rounded-lg"
+          >
+            <option value="">All Status</option>
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+
+          {/* ASSIGNEE FILTER */}
+          <input
+            type="text"
+            placeholder="Filter by assignee"
+            value={assigneeFilter}
+            onChange={(e) => setAssigneeFilter(e.target.value)}
+            className="p-2 border rounded-lg"
+          />
+
+          <button
+            onClick={() => {
+              setStatusFilter('');
+              setAssigneeFilter('');
+            }}
+            className="text-sm text-emerald-600"
+          >
+            Clear Filters
+          </button>
+        </div>
         {/* Kanban Board Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {columns.map((col) => (
@@ -139,12 +185,12 @@ export default function ProjectDetail() {
                 {col.icon}
                 <h2 className="font-bold text-slate-700">{col.title}</h2>
                 <span className="ml-auto bg-white px-2 py-0.5 rounded-md text-xs font-bold text-slate-400 border border-slate-200">
-                  {tasks.filter((t: any) => t.status === col.status).length}
+                  {filteredTasks.filter((t: any) => t.status === col.status).length}
                 </span>
               </div>
 
               <div className="space-y-4">
-                {tasks
+                {filteredTasks
                   .filter((task: any) => task.status === col.status)
                   .map((task: any) => (
                     <div 
@@ -190,7 +236,7 @@ export default function ProjectDetail() {
                     </div>
                   ))}
 
-                {tasks.filter((t: any) => t.status === col.status).length === 0 && (
+                {filteredTasks.filter((t: any) => t.status === col.status).length === 0 && (
                   <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl bg-white/50">
                     <p className="text-sm text-slate-400">No tasks in {col.title}</p>
                   </div>
